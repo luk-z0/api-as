@@ -1,59 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+API-AS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API para cadastro de formulários de usuários — responsável por receber, validar e salvar formulários no banco de dados, com autenticação, autorização e testes automatizados usando PHPUnit.
 
-## About Laravel
+**Principais responsabilidades**
+- Receber submissões de formulários de usuário via endpoints REST.
+- Validar e persistir dados em banco relacional (Eloquent + migrations).
+- Autenticação de usuários (API tokens / Sanctum / Passport).
+- Autorização por políticas ou gates para proteger recursos.
+- Testes unitários e de integração com PHPUnit.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Stack principal**
+- PHP 8+
+- Laravel (estrutura do projeto presente neste repositório)
+- MySQL / MariaDB ou SQLite (para testes)
+- PHPUnit para testes
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Estrutura relevante**
+- Código da API: [app/Http/Controllers](app/Http/Controllers)
+- Models: [app/Models](app/Models)
+- Requests (validação): [app/Http/Requests](app/Http/Requests)
+- Rotas API: [routes/api.php](routes/api.php)
+- Tests: [tests](tests)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Requisitos
+- PHP >= 8.0
+- Composer
+- Banco de dados (MySQL / MariaDB / SQLite)
 
-## Learning Laravel
+## Instalação rápida
+1. Instale dependências:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Copie o arquivo de ambiente e gere a chave:
 
-## Laravel Sponsors
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. Configure a conexão com o banco em `.env` (ex.: `DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
 
-### Premium Partners
+4. Rode as migrations:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+php artisan migrate
+```
 
-## Contributing
+5. (Opcional) Seeders para dados iniciais:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan db:seed
+```
 
-## Code of Conduct
+## Autenticação
+Este projeto usa autenticação via API tokens (recomendado: Laravel Sanctum). Fluxo básico:
+- Usuário realiza login em `POST /api/auth/login` e recebe token.
+- Token enviado via header `Authorization: Bearer <token>` nas requisições subsequentes.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Implemente ou verifique em `app/Http/Controllers/Auth` as rotas de login/registro e a configuração em `config/sanctum.php` quando usar Sanctum.
 
-## Security Vulnerabilities
+## Autorização
+Use Policies (`php artisan make:policy`) ou Gates para controlar quem pode criar, ler, atualizar ou apagar formulários. Exemplo: `FormPolicy` em `app/Policies` e registro em `AuthServiceProvider`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Endpoints sugeridos
+- `POST /api/forms` — Criar novo formulário (autenticado)
+- `GET /api/forms` — Listar formulários do usuário (autenticado)
+- `GET /api/forms/{id}` — Obter formulário específico (autorizado)
+- `PUT /api/forms/{id}` — Atualizar formulário (autorizado)
+- `DELETE /api/forms/{id}` — Excluir formulário (autorizado)
 
-## License
+TODO: Detalhar os campos e contratos na documentação da API, usando OpenAPI/Swagger para gerar specs.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Testes (PHPUnit)
+1. Configure um banco de testes (ex.: SQLite in-memory) em `phpunit.xml` ou `.env.testing`.
+2. Rodar testes:
+
+```bash
+./vendor/bin/phpunit
+```
+
+Boas práticas de testes neste projeto:
+- Testes de unidade para validações e regras de negócio em `tests/Unit`.
+- Testes de integração / HTTP para endpoints em `tests/Feature`, usando `RefreshDatabase` e factories (`database/factories`).
+
+## Executando localmente
+```bash
+php artisan serve
+```
+
+Endpoints ficarão disponíveis em `http://127.0.0.1:8000`.
+
+## Contribuição
+- Abra issues descrevendo problemas ou melhorias.
+- Para mudanças maiores, abra um pull request com descrição clara e testes cobrindo o comportamento novo.
+
+## Próximos passos
+- Scaffold de autenticação (Sanctum) e endpoints de `auth`.
+- Implementar `Form` model, migrations e requests de validação.
+- Escrever testes de Feature cobrindo fluxos principais (criar, listar, visualizar, atualizar, deletar).
+- Adicionar CI para rodar `composer install` e `phpunit` em PRs.
+
+## Licença
+Licença MIT.
