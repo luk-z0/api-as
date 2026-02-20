@@ -65,7 +65,7 @@ Implemente ou verifique em `app/Http/Controllers/Auth` as rotas de login/registr
 ## Autorização
 Use Policies (`php artisan make:policy`) ou Gates para controlar quem pode criar, ler, atualizar ou apagar formulários. Exemplo: `FormPolicy` em `app/Policies` e registro em `AuthServiceProvider`.
 
-## Endpoints sugeridos
+## Endpoints 
 - `POST /api/forms` — Criar novo formulário (autenticado)
 - `GET /api/forms` — Listar formulários do usuário (autenticado)
 - `GET /api/forms/{id}` — Obter formulário específico (autorizado)
