@@ -1,107 +1,234 @@
-API-AS
+# 🚀 API-AS
 
-API para cadastro de formulários de usuários — responsável por receber, validar e salvar formulários no banco de dados, com autenticação, autorização e testes automatizados usando PHPUnit.
+![PHP](https://img.shields.io/badge/PHP-8%2B-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-Framework-FF2D20?logo=laravel&logoColor=white)
+![Tests](https://img.shields.io/badge/Tests-Pest-22C55E)
+![Architecture](https://img.shields.io/badge/Architecture-Layered%20%7C%20SOLID-blue)
+![License](https://img.shields.io/badge/license-MIT-black)
+![Status](https://img.shields.io/badge/status-Active%20Development-brightgreen)
 
-**Principais responsabilidades**
-- Receber submissões de formulários de usuário via endpoints REST.
-- Validar e persistir dados em banco relacional (Eloquent + migrations).
-- Autenticação de usuários (API tokens / Sanctum / Passport).
-- Autorização por políticas ou gates para proteger recursos.
-- Testes unitários e de integração com PHPUnit.
+API para cadastro de formulários de usuários --- responsável por
+receber, validar e salvar formulários no banco de dados, com
+autenticação, autorização e **testes automatizados modernos com Pest**.
 
-**Stack principal**
-- PHP 8+
-- Laravel (estrutura do projeto presente neste repositório)
-- MySQL / MariaDB ou SQLite (para testes)
-- PHPUnit para testes
+Projeto focado em **boas práticas de arquitetura, organização de código,
+testabilidade e escalabilidade**, simulando um ambiente de produção
+real.
 
-**Estrutura relevante**
-- Código da API: [app/Http/Controllers](app/Http/Controllers)
-- Models: [app/Models](app/Models)
-- Requests (validação): [app/Http/Requests](app/Http/Requests)
-- Rotas API: [routes/api.php](routes/api.php)
-- Tests: [tests](tests)
+------------------------------------------------------------------------
 
-## Requisitos
-- PHP >= 8.0
-- Composer
-- Banco de dados (MySQL / MariaDB / SQLite)
+## 🚀 Principais responsabilidades
 
-## Instalação rápida
-1. Instale dependências:
+-   Receber submissões de formulários via endpoints REST
+-   Validar dados com Form Requests
+-   Persistir dados em banco relacional (Eloquent + migrations)
+-   Autenticação baseada em tokens
+-   Autorização com Policies/Gates
+-   Testes automatizados (unitários e integração)
+-   Estrutura preparada para crescimento e manutenção
 
-```bash
+------------------------------------------------------------------------
+
+## 🧰 Stack principal
+
+-   PHP 8+
+-   Laravel
+-   MySQL / MariaDB / SQLite
+-   Pest (testes)
+-   Eloquent ORM
+
+------------------------------------------------------------------------
+
+## 📁 Estrutura relevante
+
+-   Código da API: `app/Http/Controllers`
+-   Models: `app/Models`
+-   Requests (validação): `app/Http/Requests`
+-   Rotas API: `routes/api.php`
+-   Testes: `tests`
+
+------------------------------------------------------------------------
+
+## 📋 Requisitos
+
+-   PHP \>= 8.0
+-   Composer
+-   Banco de dados (MySQL / MariaDB / SQLite)
+
+------------------------------------------------------------------------
+
+## ⚙️ Instalação rápida
+
+### 1. Instale dependências
+
+``` bash
 composer install
 ```
 
-2. Copie o arquivo de ambiente e gere a chave:
+### 2. Configure ambiente
 
-```bash
+``` bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-3. Configure a conexão com o banco em `.env` (ex.: `DB_CONNECTION`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).
+### 3. Configure banco no `.env`
 
-4. Rode as migrations:
+    DB_CONNECTION=
+    DB_DATABASE=
+    DB_USERNAME=
+    DB_PASSWORD=
 
-```bash
+### 4. Rode migrations
+
+``` bash
 php artisan migrate
 ```
 
-5. (Opcional) Seeders para dados iniciais:
+### 5. (Opcional) Seeders
 
-```bash
+``` bash
 php artisan db:seed
 ```
 
-## Autenticação
-Este projeto usa autenticação via API tokens (recomendado: Laravel Sanctum). Fluxo básico:
-- Usuário realiza login em `POST /api/auth/login` e recebe token.
-- Token enviado via header `Authorization: Bearer <token>` nas requisições subsequentes.
+------------------------------------------------------------------------
 
-Implemente ou verifique em `app/Http/Controllers/Auth` as rotas de login/registro e a configuração em `config/sanctum.php` quando usar Sanctum.
+## 🔐 Autenticação
 
-## Autorização
-Use Policies (`php artisan make:policy`) ou Gates para controlar quem pode criar, ler, atualizar ou apagar formulários. Exemplo: `FormPolicy` em `app/Policies` e registro em `AuthServiceProvider`.
+Autenticação baseada em **API Tokens com Sanctum**.
 
-## Endpoints 
-- `POST /api/forms` — Criar novo formulário (autenticado)
-- `GET /api/forms` — Listar formulários do usuário (autenticado)
-- `GET /api/forms/{id}` — Obter formulário específico (autorizado)
-- `PUT /api/forms/{id}` — Atualizar formulário (autorizado)
-- `DELETE /api/forms/{id}` — Excluir formulário (autorizado)
+Fluxo:
 
-TODO: Detalhar os campos e contratos na documentação da API, usando OpenAPI/Swagger para gerar specs.
-
-## Testes (PHPUnit)
-1. Configure um banco de testes (ex.: SQLite in-memory) em `phpunit.xml` ou `.env.testing`.
-2. Rodar testes:
+1.  Login → `POST /api/auth/login`
+2.  Recebe token
+3.  Envia token:
 
 ```bash
-./vendor/bin/phpunit
+Authorization: Bearer <token>
 ```
 
-Boas práticas de testes neste projeto:
-- Testes de unidade para validações e regras de negócio em `tests/Unit`.
-- Testes de integração / HTTP para endpoints em `tests/Feature`, usando `RefreshDatabase` e factories (`database/factories`).
+------------------------------------------------------------------------
 
-## Executando localmente
-```bash
+## 🛡️ Autorização
+
+Controle de acesso com:
+
+-   Policies
+-   Gates
+
+Exemplo:
+
+-   `FormPolicy`
+-   Registro no `AuthServiceProvider`
+
+Garante que cada usuário acesse apenas seus próprios formulários.
+
+------------------------------------------------------------------------
+
+## 🌐 Endpoints
+
+  Método   Endpoint          Descrição
+  -------- ----------------- -------------------------------
+  POST     /api/forms        Criar formulário
+  GET      /api/forms        Listar formulários do usuário
+  GET      /api/forms/{id}   Visualizar formulário
+  PUT      /api/forms/{id}   Atualizar
+  DELETE   /api/forms/{id}   Excluir
+
+------------------------------------------------------------------------
+
+# 🧪 Testes automatizados (Pest)
+
+O projeto utiliza **Pest**, uma alternativa moderna ao PHPUnit com
+sintaxe mais expressiva e legível.
+
+### Rodar testes
+
+``` bash
+./vendor/bin/pest
+```
+
+### Boas práticas adotadas
+
+-   Testes de unidade → regras de negócio
+-   Testes de integração/HTTP → endpoints
+-   `RefreshDatabase`
+-   Factories
+-   Banco SQLite in-memory
+
+Benefícios:
+
+-   Feedback rápido
+-   Código mais seguro
+-   Facilidade de manutenção
+-   Cobertura de fluxos críticos da API
+
+------------------------------------------------------------------------
+
+# 🧱 Arquitetura em Camadas (Layered Architecture)
+
+Este projeto possui uma **feature branch demonstrando arquitetura em
+camadas**, separando responsabilidades de forma clara e escalável:
+
+👉
+https://github.com/luk-z0/api-as/tree/feature/layered-archtecture-example
+
+### Organização
+
+    Controllers  → entrada HTTP
+    Services     → regras de negócio
+    Repositories → acesso a dados
+    Models       → entidades
+
+### Objetivos
+
+-   Baixo acoplamento
+-   Alta coesão
+-   Facilidade de testes
+-   Código mais limpo
+-   Manutenção simplificada
+-   Pronto para crescer sem virar "monolito bagunçado"
+
+Padrões aplicados:
+
+-   Clean Architecture
+-   SOLID
+-   Service Layer
+-   Repository Pattern
+
+------------------------------------------------------------------------
+
+## ▶️ Executando localmente
+
+``` bash
 php artisan serve
 ```
 
-Endpoints ficarão disponíveis em `http://127.0.0.1:8000`.
+Disponível em:
 
-## Contribuição
-- Abra issues descrevendo problemas ou melhorias.
-- Para mudanças maiores, abra um pull request com descrição clara e testes cobrindo o comportamento novo.
+    http://127.0.0.1:8000
 
-## Próximos passos
-- Scaffold de autenticação (Sanctum) e endpoints de `auth`.
-- Implementar `Form` model, migrations e requests de validação.
-- Escrever testes de Feature cobrindo fluxos principais (criar, listar, visualizar, atualizar, deletar).
-- Adicionar CI para rodar `composer install` e `phpunit` em PRs.
+------------------------------------------------------------------------
 
-## Licença
-Licença MIT.
+## 🤝 Contribuição
+
+-   Abra issues para melhorias
+-   Pull requests com testes
+-   Código limpo e padronizado
+
+------------------------------------------------------------------------
+
+## 🗺️ Próximos passos
+
+-   Documentação OpenAPI/Swagger
+-   Cobertura de testes 100%
+-   CI (GitHub Actions)
+-   Rate limiting
+-   Logs estruturados
+-   Cache
+
+------------------------------------------------------------------------
+
+## 📄 Licença
+
+MIT
