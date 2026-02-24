@@ -11,8 +11,8 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $current_page = $request->get('current_page') ?? 1;
-        $per_page = $request->get('per_page') ?? 10;
+        $current_page = $request['current_page'] ?? 1;
+        $per_page = $request['per_page'] ?? 10;
 
         $offset = ($current_page - 1) * $per_page;
 
