@@ -21,7 +21,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         try {
-            return response()->json($this->user->new(CreateUserDTO::makeFromRequest($request)), 201);
+            return response()->json($this->user->create(CreateUserDTO::makeFromRequest($request)), 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'User creation failed'], 500);
         }

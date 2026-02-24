@@ -19,9 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind(
-            \App\Http\Repositories\UserRepositoryInterface::class,
-            \App\Http\Repositories\UserRepository::class
-        );
+        //
     }
 }
