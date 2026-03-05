@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
+use App\Models\User;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
@@ -21,12 +21,10 @@ class UserController extends Controller
         return response()->json($users, 200);
     }
 
-    public function store(UserStoreRequest $request)
+    public function store(StoreUserRequest $request, UserService $service)
     {
         try {
-            $data = $request->validated();
-            $data['password'] = bcrypt($data['password']);
-            $user = User::create($data);
+            $user = $service->create($request->validated());
 
             return response()->json($user, 201);
         } catch (\Exception $e) {
@@ -39,13 +37,12 @@ class UserController extends Controller
         try {
 
             return response()->json($user, 200);
-
         } catch (\Exception $e) {
             return response()->json(['error' => 'User not found'], 404);
         }
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         try {
             $updatedData = $request->validated();
