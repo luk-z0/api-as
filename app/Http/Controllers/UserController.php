@@ -9,6 +9,9 @@ use App\Services\UserService;
 
 class UserController extends Controller
 {
+
+    public function __construct(protected UserService $service) {}
+
     public function index(Request $request)
     {
         $current_page = $request['current_page'] ?? 1;
@@ -21,10 +24,10 @@ class UserController extends Controller
         return response()->json($users, 200);
     }
 
-    public function store(StoreUserRequest $request, UserService $service)
+    public function store(StoreUserRequest $request)
     {
         try {
-            $user = $service->create($request->validated());
+            $user = $this->service->create($request->validated());
 
             return response()->json($user, 201);
         } catch (\Exception $e) {

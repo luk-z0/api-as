@@ -9,6 +9,12 @@ use App\Services\{AuthService, UserService};
 
 class AuthController extends Controller
 {
+
+    public function __construct(
+        protected AuthService $service,
+        protected UserService $userService
+    ) {}
+
     function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->validated();
@@ -35,9 +41,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(StoreUserRequest $request, AuthService $service): JsonResponse
+    public function register(StoreUserRequest $request): JsonResponse
     {
-        $user = $service->register($request->validated());
+        $user = $this->service->register($request->validated());
 
         return response()->json([
             'message' => 'User created successfully',
