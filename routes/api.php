@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AuthController, UserController};
 
-Route::apiResource('/users', UserController::class)
-    ->whereNumber('user')
-    ->middleware('auth:sanctum');
+Route::prefix('users')->middleware('auth:sanctum')->group(function () {
+    Route::apiResource('', UserController::class)->whereNumber('user');
+});
 
 Route::prefix('auth')->group(function () {
 
