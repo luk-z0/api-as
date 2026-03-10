@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\{PaginationRequest, StoreUserRequest, UpdateUserRequest};
+use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use App\Services\UserService;
 
@@ -37,7 +38,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-
+        Gate::authorize('update',$user);
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -50,7 +51,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-
+        Gate::authorize('delete',$user);
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
