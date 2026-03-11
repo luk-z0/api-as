@@ -10,7 +10,7 @@ class UserPolicy
 
     public function before(User $user): bool|null
     {
-        if ($user->hasRole('admin')) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -24,17 +24,19 @@ class UserPolicy
 
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->id ===  $model->id;
     }
 
     public function create(User $user): bool
     {
-        return true;
+        return false;
     }
 
-    public function update(User $user, User $model): bool
+    public function update(User $user, User $model): Response
     {
-        return $user->id === $model->id;
+        return $user->id === $model->id
+                ? Response::allow()
+                : Response::deny('You do not own this user.');
     }
 
     public function delete(User $user, User $model): bool
