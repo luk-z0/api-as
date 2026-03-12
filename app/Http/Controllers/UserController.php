@@ -48,6 +48,12 @@ class UserController extends Controller
         $this->service->delete($user);
         return response()->json(null, 204);
     }
+    
+    public function forceDelete(User $user)
+    {
+        //TODO: Implement force delete method in service
+        return response()->json(null, 204);
+    }
 
     public function restore(User $user)
     {

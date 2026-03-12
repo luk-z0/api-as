@@ -9,14 +9,19 @@ Route::get('/ping', function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class)->whereNumber('user');
+    
+    Route::controller(UserController::class)->prefix('users')->group(function () {
+        Route::patch('{user}/restore', 'restore');
+        Route::delete('{user}/force', 'forceDelete');
+    });
 });
 
-Route::prefix('auth')->group(function () {
+Route::controller(AuthController::class)->prefix('auth')->group(function () {
 
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', 'login');
+    Route::post('/register', 'register');
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/logout', 'logout');
     });
 });
