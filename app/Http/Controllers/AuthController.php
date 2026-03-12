@@ -17,9 +17,7 @@ class AuthController extends Controller
 
     function login(LoginRequest $request): JsonResponse
     {
-        $credentials = $request->validated();
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->validated())) {
 
             return response()->json([
                 'access_token' => $request->user()->createToken('auth_token')->plainTextToken,
@@ -41,7 +39,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(StoreUserRequest $request): JsonResponse
+    function register(StoreUserRequest $request): JsonResponse
     {
         $user = $this->service->register($request->validated());
 
